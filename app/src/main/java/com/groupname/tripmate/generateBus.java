@@ -4,7 +4,7 @@ import android.app.Application;
 
 import java.util.ArrayList;
 
-public class generateBus {//it run runs before main activity and finish at last
+public class generateBus {
     public static ArrayList<bus> buses;
 
     public generateBus() {
