@@ -2,14 +2,13 @@ package com.groupname.tripmate;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 
 /**
@@ -18,7 +17,7 @@ import android.widget.Button;
 public class homeFragment extends Fragment {
 
     View view;
-    Button BTNsignout, main_activity_view_schedule;
+    Button main_activity_view_schedule, btnAdd;
     public homeFragment() {
         // Required empty public constructor
     }
@@ -38,6 +37,12 @@ public class homeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         main_activity_view_schedule = (Button) view.findViewById(R.id.main_activity_view_schedule);
         main_activity_view_schedule.setOnTouchListener(new ButtonHighlighterOnTouchListener(main_activity_view_schedule));
+        btnAdd = view.findViewById(R.id.btnSubmit);
+        btnAdd.setOnTouchListener(new ButtonHighlighterOnTouchListener(btnAdd));
+
+        if (FirstClass.user.getProperty("isAdmin").equals("0")) {
+            btnAdd.setVisibility(View.GONE);
+        }
 
         // BTNsignout = findViewById(R.id.BTNsignout);
        /* BTNsignout.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +55,13 @@ public class homeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), com.groupname.tripmate.Schedule_Activity.class));
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), com.groupname.tripmate.AddBus.class));
             }
         });
     }

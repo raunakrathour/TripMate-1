@@ -1,87 +1,69 @@
 package com.groupname.tripmate;
 
+import java.util.Date;
+
 public class bus {
-    private String busName;
-    private String busNumber;
-    private String time1;
-    private String from1;
-    private String to1;
-    private String time2;
-    private String from2;
-    private String to2;
+    private String name;
+    private String number;
+    private String time;
+    private String from;
+    private String to;
+    private Date updated;
+    private String objectId;
 
-    public bus(String busName, String busNumber, String time1, String from1, String to1, String time2, String from2, String to2) {
-        this.busName = busName;
-        this.busNumber = busNumber;
-        this.time1 = time1;
-        this.from1 = from1;
-        this.to1 = to1;
-        this.time2 = time2;
-        this.from2 = from2;
-        this.to2 = to2;
+    public String getName() {
+        return name;
     }
 
-    public String getBusName() {
-        return busName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setBusName(String busName) {
-        this.busName = busName;
+    public String getNumber() {
+        return number;
     }
 
-    public String getBusNumber() {
-        return busNumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
-    public void setBusNumber(String busNumber) {
-        this.busNumber = busNumber;
+    public String getTime() {
+        return time;
     }
 
-    public String getTime1() {
-        return time1;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public void setTime1(String time1) {
-        this.time1 = time1;
+    public String getFrom() {
+        return from;
     }
 
-    public String getFrom1() {
-        return from1;
+    public void setFrom(String from) {
+        this.from = from;
     }
 
-    public void setFrom1(String from1) {
-        this.from1 = from1;
+    public String getTo() {
+        return to;
     }
 
-    public String getTo1() {
-        return to1;
+    public void setTo(String to) {
+        this.to = to;
     }
 
-    public void setTo1(String to1) {
-        this.to1 = to1;
+    public Date getUpdated() {
+        return updated;
     }
 
-    public String getTime2() {
-        return time2;
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
-    public void setTime2(String time2) {
-        this.time2 = time2;
+    public String getObjectId() {
+        return objectId;
     }
 
-    public String getFrom2() {
-        return from2;
-    }
-
-    public void setFrom2(String from2) {
-        this.from2 = from2;
-    }
-
-    public String getTo2() {
-        return to2;
-    }
-
-    public void setTo2(String to2) {
-        this.to2 = to2;
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }

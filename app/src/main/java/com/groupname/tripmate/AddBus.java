@@ -14,74 +14,71 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
-public class Register extends AppCompatActivity {
+public class AddBus extends AppCompatActivity {
+
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
-    private EditText etName, etEmail, etPass, etRepass;
-    private Button btnRegister;
+    EditText etName, etNumber, etTime, etFrom, etTo;
+    Button btnSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_add_bus);
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
         etName = findViewById(R.id.etName);
-        etEmail = findViewById(R.id.etEmail);
-        etPass = findViewById(R.id.etPass);
-        etRepass = findViewById(R.id.etRepass);
-        btnRegister = findViewById(R.id.btnRegister);
+        etNumber = findViewById(R.id.etNumber);
+        etTime = findViewById(R.id.etTime);
+        etFrom = findViewById(R.id.etFrom);
+        etTo = findViewById(R.id.etTo);
+        btnSubmit = findViewById(R.id.btnSubmit);
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etEmail.getText().toString().isEmpty() || etName.getText().toString().isEmpty() || etPass.getText().toString().isEmpty() || etRepass.getText().toString().isEmpty()) {
-                    Toast.makeText(Register.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
+                if(etName.getText().toString().isEmpty() || etNumber.getText().toString().isEmpty() ||
+                etTime.getText().toString().isEmpty() || etFrom.getText().toString().isEmpty() || etTo.getText().toString().isEmpty()) {
+                    Toast.makeText(AddBus.this, "Please enter all fields", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (etPass.getText().toString().equals(etRepass.getText().toString())) {
-                        String name = etName.getText().toString().trim();
-                        String email = etEmail.getText().toString().trim();
-                        String password = etPass.getText().toString();
+                    String name = etName.getText().toString().trim();
+                    String number = etNumber.getText().toString().trim();
+                    String time = etTime.getText().toString().trim();
+                    String from = etFrom.getText().toString().trim();
+                    String to = etTo.getText().toString().trim();
 
-                        BackendlessUser user = new BackendlessUser();
-                        user.setEmail(email);
-                        user.setPassword(password);
-                        user.setProperty("name", name);
-                        user.setProperty("isAdmin", "0");
-                        user.setProperty("isDriver", "0");
+                    bus Bus = new bus();
+                    Bus.setName(name);
+                    Bus.setNumber(number);
+                    Bus.setTime(time);
+                    Bus.setFrom(from);
+                    Bus.setTo(to);
 
-                        tvLoad.setText("Creating Account");
-                        showProgress(true);
-                        Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
-                            @Override
-                            public void handleResponse(BackendlessUser response) {
-                                showProgress(false);
-                                Toast.makeText(Register.this, "Congratulations your has been account created", Toast.LENGTH_SHORT).show();
-                                Register.this.finish();
-                            }
+                    showProgress(true);
+                    tvLoad.setText("Adding new bus");
+                    Backendless.Persistence.save(Bus, new AsyncCallback<bus>() {
+                        @Override
+                        public void handleResponse(bus response) {
+                            Toast.makeText(AddBus.this, "Bus added successfully", Toast.LENGTH_SHORT).show();
+                            AddBus.this.finish();
+                        }
 
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                showProgress(false);
-                                Toast.makeText(Register.this, "Error " + fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        Toast.makeText(Register.this, "Password in Both Fields Should be Same", Toast.LENGTH_SHORT).show();
-                    }
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(AddBus.this, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
-
     }
 
     /**
@@ -129,4 +126,5 @@ public class Register extends AppCompatActivity {
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
+
 }
