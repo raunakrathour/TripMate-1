@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 public class homeFragment extends Fragment {
 
     View view;
-    Button main_activity_view_schedule, btnAdd;
+    Button main_activity_view_schedule, btnAdd, main_activity_btn1;
     public homeFragment() {
         // Required empty public constructor
     }
@@ -39,6 +39,8 @@ public class homeFragment extends Fragment {
         main_activity_view_schedule.setOnTouchListener(new ButtonHighlighterOnTouchListener(main_activity_view_schedule));
         btnAdd = view.findViewById(R.id.btnSubmit);
         btnAdd.setOnTouchListener(new ButtonHighlighterOnTouchListener(btnAdd));
+        main_activity_btn1 = view.findViewById(R.id.main_activity_btn1);
+        main_activity_btn1.setOnTouchListener(new ButtonHighlighterOnTouchListener(main_activity_btn1));
 
         if (FirstClass.user.getProperty("isAdmin").equals("0")) {
             btnAdd.setVisibility(View.GONE);
@@ -62,6 +64,15 @@ public class homeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), com.groupname.tripmate.AddBus.class));
+            }
+        });
+
+        main_activity_btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), com.groupname.tripmate.Schedule_Activity.class);
+                intent.putExtra("activity", "homeFragment");
+                startActivity(intent);
             }
         });
     }
