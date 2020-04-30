@@ -28,14 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //for navigation drawer at left top(a 3 lined button which opens navigation drawer)
     private DrawerLayout drawer;
     NavigationView navigationView;
-    //Constants
-    String TAG = "MyLOGS";
-    String mUsername, mUserEmail;
-    private static final int RC_SIGN_IN = 1;
 
-    //firebase
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
 
 
@@ -66,69 +59,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
          //firebase signin
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // user is signed in
-                    Log.d(TAG, "onAuthStateChanged: Signed In");
-                    Toast.makeText(MainActivity.this, "Welcome " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                    mUsername = user.getDisplayName();
-                    mUserEmail = user.getEmail();
-                } else {
-                    // user is signed out
-                    Toast.makeText(MainActivity.this, "Please signin", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onAuthStateChanged: User is signed out.");
-                    //OnSignedOutInitialise();
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    //.setLogo(R.drawable.ic_web_hi_res_512)
-                                    //setting login screen theme
-                                    .setTheme(R.style.SplashScreen)
 
-                                    .setAvailableProviders(Arrays.asList(
-                                            new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                            new AuthUI.IdpConfig.EmailBuilder().build()))
-                                    .build(),
-                            RC_SIGN_IN);
-                }
-            }
-        };
 
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-    }
-    //return to main activity from google Auth with signin
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-                //after logout and login again home fragment should be selected in nav bar
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment, new homeFragment()).commit();
-                navigationView.setCheckedItem(R.id.nav_home);
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Cannot work, until you sign in.", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
 //when nav is open and we press back then it will close nav drawer
     //else close app
     @Override

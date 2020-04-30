@@ -42,5 +42,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.0.2'
+    //backendless
+    implementation group: 'com.backendless', name: 'backendless', version: '5.7.1'
+
+    // required for real-time database and real-time messaging
+    implementation('io.socket:socket.io-client:1.0.0') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
 
 }
