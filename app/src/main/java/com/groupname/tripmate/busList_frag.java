@@ -1,16 +1,23 @@
 package com.groupname.tripmate;
 
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.DataQueryBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -45,8 +52,24 @@ public class busList_frag extends Fragment {
         layoutManager = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        myadapter = new busAdapter(this.getActivity(),generateBus.buses);
-        recyclerView.setAdapter(myadapter);
+        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+        queryBuilder.addGroupBy("time");
+
+        Backendless.Persistence.of(bus.class).find(queryBuilder, new AsyncCallback<List<bus>>() {
+            @Override
+            public void handleResponse(List<bus> response) {
+                FirstClass.busses = (ArrayList<bus>) response;
+                myadapter = new busAdapter(getActivity(), FirstClass.busses);
+                recyclerView.setAdapter(myadapter);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(getContext(), "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
   //  public void notifyItem()

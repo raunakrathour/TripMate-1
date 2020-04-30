@@ -2,15 +2,12 @@ package com.groupname.tripmate;
 
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -23,16 +20,14 @@ public class busAdapter extends RecyclerView.Adapter<busAdapter.viewHolder>
     }
     private ArrayList<bus>buses;
     ItemClicked activity;
-    public busAdapter(Context context,ArrayList<bus> list)
+    public busAdapter(Context context, ArrayList<bus> list)
     {
         buses = list;
         activity = (ItemClicked)context;
     }
     public class viewHolder extends RecyclerView.ViewHolder
     {
-
         TextView tvBus_card_design1,tvBus_card_design2;
-
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,8 +53,8 @@ public class busAdapter extends RecyclerView.Adapter<busAdapter.viewHolder>
     @Override
     public void onBindViewHolder(@NonNull busAdapter.viewHolder holder, int position) {
         holder.itemView.setTag(buses.get(position));
-        holder.tvBus_card_design1.setText(buses.get(position).getBusName());
-        holder.tvBus_card_design2.setText(buses.get(position).getBusNumber());
+        holder.tvBus_card_design1.setText(buses.get(position).getName());
+        holder.tvBus_card_design2.setText(buses.get(position).getNumber());
 
 
 
