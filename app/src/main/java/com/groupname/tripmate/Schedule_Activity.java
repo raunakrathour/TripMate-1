@@ -28,7 +28,7 @@ public class Schedule_Activity extends AppCompatActivity implements busAdapter.I
     //these are text views on busDetail_Frag
     TextView fragment_bus_detail_frag_tvBusName, fragment_bus_detail_frag_tvBusNumber, fragment_bus_detail_frag_tvTime1,
             fragment_bus_detail_frag_tvFrom1, fragment_bus_detail_frag_tvTo1;
-    ImageView bus_logo, ivDelete;
+    ImageView bus_logo, ivDelete, ivAdd;
 
     busList_frag list;
 
@@ -44,14 +44,20 @@ public class Schedule_Activity extends AppCompatActivity implements busAdapter.I
 //        new generateBus();
         bus_logo = findViewById(R.id.bus_logo);
         ivDelete = findViewById(R.id.ivDelete);
+        ivAdd = findViewById(R.id.ivAdd);
         fragment_bus_detail_frag_tvBusName = findViewById(R.id.fragment_bus_detail_frag_tvBusName);
         fragment_bus_detail_frag_tvBusNumber = findViewById(R.id.fragment_bus_detail_frag_tvBusNumber);
         fragment_bus_detail_frag_tvTime1 = findViewById(R.id.fragment_bus_detail_frag_tvTime1);
         fragment_bus_detail_frag_tvFrom1 = findViewById(R.id.fragment_bus_detail_frag_tvFrom1);
         fragment_bus_detail_frag_tvTo1 = findViewById(R.id.fragment_bus_detail_frag_tvTo1);
 
+        ivAdd.setVisibility(View.GONE);
         if(FirstClass.user.getProperty("isAdmin").equals("0")) {
             ivDelete.setVisibility(View.GONE);
+        }
+
+        if(getIntent().hasExtra("activity") && getIntent().getStringExtra("activity").equals("homeFragment")) {
+            ivAdd.setVisibility(View.VISIBLE);
         }
 
         // fragmentManager = this.getSupportFragmentManager();
@@ -104,6 +110,46 @@ public class Schedule_Activity extends AppCompatActivity implements busAdapter.I
                                 FirstClass.busses.remove(index);
                                 Toast.makeText(Schedule_Activity.this, "Bus successfully deleted", Toast.LENGTH_SHORT).show();
                                 setResult(RESULT_OK);
+                                Schedule_Activity.this.finish();
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                Toast.makeText(Schedule_Activity.this, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        ivAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder dialog = new AlertDialog.Builder(Schedule_Activity.this);
+                dialog.setMessage("Are you sure you want to confirm this booking?");
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showProgress(true);
+                        tvLoad.setText("Adding the booking");
+
+                        Booking booking = new Booking();
+                        booking.setBookerName(FirstClass.user.getProperty("name").toString());
+                        booking.setBusName(FirstClass.busses.get(index).getName());
+                        booking.setTime(FirstClass.busses.get(index).getTime());
+
+                        Backendless.Persistence.save(booking, new AsyncCallback<Booking>() {
+                            @Override
+                            public void handleResponse(Booking response) {
+                                Toast.makeText(Schedule_Activity.this, "Booking added successfully", Toast.LENGTH_SHORT).show();
                                 Schedule_Activity.this.finish();
                             }
 

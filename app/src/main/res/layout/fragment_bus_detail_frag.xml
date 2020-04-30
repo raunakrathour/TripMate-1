@@ -183,6 +183,14 @@
                     android:background="@color/colorPrimary"
                     android:clickable="true"
                     android:src="@drawable/delete" />
+
+                <ImageView
+                    android:id="@+id/ivAdd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:src="@drawable/add" />
             </LinearLayout>
 
         </LinearLayout>
