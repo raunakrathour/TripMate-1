@@ -18,7 +18,7 @@ public class SplashScreen extends AppCompatActivity{
             @Override
             public void run() {
                 // if you are redirecting from a fragment then use getActivity() as the context.
-                startActivity(new Intent(SplashScreen.this,MainActivity.class));
+                startActivity(new Intent(SplashScreen.this,login.class));
                 // To close the CurrentActitity, r.g. SpalshActivity
                 finish();
             }
