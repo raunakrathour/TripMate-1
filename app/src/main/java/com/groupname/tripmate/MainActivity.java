@@ -17,6 +17,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -86,7 +89,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment,new homeFragment()).commit();//goto home fragment
                 break;
             case R.id.nav_logout://select logout button
-                AuthUI.getInstance().signOut(getApplicationContext());// logout from app
+                Backendless.UserService.logout(new AsyncCallback<Void>() {
+                    @Override
+                    public void handleResponse(Void response) {
+                        Toast.makeText(MainActivity.this,"Hope you will be back soon",Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(MainActivity.this,login.class));
+                        MainActivity.this.finish();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                       Toast.makeText(MainActivity.this,"Error "+fault.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                });// logout from app
+
                 break;
             case R.id.nav_drivers://select driver button
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment,new Drivers_Fragment()).commit();//open drivers fragment

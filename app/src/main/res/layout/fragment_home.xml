@@ -41,7 +41,7 @@ tools:context=".homeFragment">
     android:textSize="24sp" />
 
 <Button
-    android:id="@+id/main_activity_btn3"
+    android:id="@+id/btnTrackLocation"
 
     android:layout_width="250dp"
     android:layout_height="50dp"
