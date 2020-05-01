@@ -5,90 +5,80 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.DataQueryBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class busList_frag extends Fragment {
+public class AddBus extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    RecyclerView.Adapter myadapter;
-    View view;
-
-    public busList_frag() {
-
-    }
-
+    EditText etName, etNumber, etTime, etFrom, etTo;
+    Button btnSubmit;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view=inflater.inflate(R.layout.fragment_bus_list_frag, container, false);
-        return view;
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_bus);
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+        tvLoad = findViewById(R.id.tvLoad);
 
-        mLoginFormView = view.findViewById(R.id.login_form);
-        mProgressView = view.findViewById(R.id.login_progress);
-        tvLoad = view.findViewById(R.id.tvLoad);
+        etName = findViewById(R.id.etName);
+        etNumber = findViewById(R.id.etNumber);
+        etTime = findViewById(R.id.etTime);
+        etFrom = findViewById(R.id.etFrom);
+        etTo = findViewById(R.id.etTo);
+        btnSubmit = findViewById(R.id.btnSubmit);
 
-        recyclerView = view.findViewById(R.id.list);
-        recyclerView.setHasFixedSize(true);
-        //From here we can control the listing style on buslist_Frag
-        //we can make any layout as needed
-        layoutManager = new LinearLayoutManager(this.getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-
-        showProgress(true);
-        tvLoad.setText("Fetching the schedule");
-        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-        queryBuilder.addGroupBy("time");
-
-        Backendless.Persistence.of(bus.class).find(queryBuilder, new AsyncCallback<List<bus>>() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void handleResponse(List<bus> response) {
-                FirstClass.busses = (ArrayList<bus>) response;
-                myadapter = new busAdapter(getActivity(), FirstClass.busses);
-                showProgress(false);
-                recyclerView.setAdapter(myadapter);
-            }
+            public void onClick(View v) {
+                if(etName.getText().toString().isEmpty() || etNumber.getText().toString().isEmpty() ||
+                etTime.getText().toString().isEmpty() || etFrom.getText().toString().isEmpty() || etTo.getText().toString().isEmpty()) {
+                    Toast.makeText(AddBus.this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+                } else {
+                    String name = etName.getText().toString().trim();
+                    String number = etNumber.getText().toString().trim();
+                    String time = etTime.getText().toString().trim();
+                    String from = etFrom.getText().toString().trim();
+                    String to = etTo.getText().toString().trim();
 
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(getContext(), "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
-                showProgress(false);
+                    bus Bus = new bus();
+                    Bus.setName(name);
+                    Bus.setNumber(number);
+                    Bus.setTime(time);
+                    Bus.setFrom(from);
+                    Bus.setTo(to);
+
+                    showProgress(true);
+                    tvLoad.setText("Adding new bus");
+                    Backendless.Persistence.save(Bus, new AsyncCallback<bus>() {
+                        @Override
+                        public void handleResponse(bus response) {
+                            Toast.makeText(AddBus.this, "Bus added successfully", Toast.LENGTH_SHORT).show();
+                            AddBus.this.finish();
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(AddBus.this, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
-
-
     }
 
     /**
@@ -137,8 +127,4 @@ public class busList_frag extends Fragment {
         }
     }
 
-  //  public void notifyItem()
-  //  {
-       // myadapter.notifyDataSetChanged();
-   // }
 }

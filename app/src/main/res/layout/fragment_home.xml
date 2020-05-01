@@ -54,7 +54,18 @@ tools:context=".homeFragment">
     android:textColor="@color/white"
     android:textSize="24sp" />
 
-<Button
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/buton_select_2"
+        android:text="Add Bus"
+        android:textAllCaps="false"
+        android:textColor="#FF7800"
+        android:textSize="24sp" />
+
+    <Button
     android:id="@+id/BTNsignout"
 
     android:layout_width="250dp"

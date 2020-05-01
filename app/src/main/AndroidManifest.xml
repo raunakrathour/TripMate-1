@@ -20,6 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -36,6 +37,10 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
         <activity android:name=".TrackLocation" />
+
+        <activity android:name=".AddBus" />
+        <activity android:name=".Main2Activity" />
+
         <activity android:name=".Register" />
         <activity android:name=".login" />
         <activity android:name=".Schedule_Activity" />
