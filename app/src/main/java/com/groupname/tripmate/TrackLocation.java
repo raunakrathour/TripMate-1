@@ -72,7 +72,10 @@ public class TrackLocation extends AppCompatActivity {
                     }
                     else
                     {
-                        startActivity(new Intent(TrackLocation.this,MapsActivity.class));
+                        Intent intent = new Intent(getBaseContext(), MapsActivity.class);
+                        intent.putExtra("ID", "myLocation");
+                        startActivity(intent);
+                       // startActivity(new Intent(TrackLocation.this,MapsActivity.class));
                     }
 
                 }
@@ -94,7 +97,10 @@ public class TrackLocation extends AppCompatActivity {
                 }
                 else
                 {
-                    startActivity(new Intent(TrackLocation.this,MapsActivity.class));
+                   // Intent intent =new Intent(TrackLocation.this,MapsActivity.class);
+                    Intent intent = new Intent(getBaseContext(), MapsActivity.class);
+                    intent.putExtra("ID", "busesLocation");
+                    startActivity(intent);
                 }
             }
         });

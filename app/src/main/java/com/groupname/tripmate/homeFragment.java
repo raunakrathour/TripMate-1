@@ -1,11 +1,13 @@
 package com.groupname.tripmate;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -19,7 +21,8 @@ public class homeFragment extends Fragment {
 
     View view;
 
-    Button  main_activity_view_schedule,btnTrackLocation,main_activity_btn1,btnAdd;
+    Button  main_activity_view_schedule,btnTrackLocation,main_activity_btn1,btnAdd,btnEmer;
+    TextView tvdriver;
 
 
 
@@ -53,6 +56,21 @@ public class homeFragment extends Fragment {
             btnAdd.setVisibility(View.GONE);
         }
 
+       tvdriver = view.findViewById(R.id.tvdriver);
+        btnEmer = view.findViewById(R.id.btnEmer);
+
+        btnEmer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Calling Adimin", Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:6265502674"));
+                        startActivity(intent);
+
+
+
+            }
+        });
 
         // BTNsignout = findViewById(R.id.BTNsignout);
        /* BTNsignout.setOnClickListener(new View.OnClickListener() {
@@ -72,11 +90,13 @@ public class homeFragment extends Fragment {
         if(FirstClass.user.getProperty("isDriver").equals("1"))
         {
             main_activity_btn1.setVisibility(View.GONE);
+            tvdriver.setVisibility(View.VISIBLE);
             btnTrackLocation.setText("Set Location");
             Toast.makeText(this.getActivity(), "Welcome Driver Set Your Location", Toast.LENGTH_LONG).show();
         }
         else
         {
+            tvdriver.setVisibility(View.GONE);
             main_activity_btn1.setVisibility(View.VISIBLE);
             btnTrackLocation.setText("Track Location");
         }
