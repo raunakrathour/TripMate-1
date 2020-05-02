@@ -57,7 +57,7 @@ public class Schedule_Activity extends AppCompatActivity implements busAdapter.I
         }
 
         if(getIntent().hasExtra("activity") && getIntent().getStringExtra("activity").equals("homeFragment")) {
-            ivAdd.setVisibility(View.VISIBLE);
+            ivAdd.setVisibility(View.GONE);
         }
 
         // fragmentManager = this.getSupportFragmentManager();

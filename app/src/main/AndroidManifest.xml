@@ -36,10 +36,11 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        <activity android:name=".TrackLocation" />
+        <activity android:name=".TrackLocation"  android:label="Track Location"/>
 
-        <activity android:name=".AddBus" />
+        <activity android:name=".AddBus"  android:label="Add Bus"/>
         <activity android:name=".Main2Activity" />
+        <activity android:name=".Drivers_Fragment" android:label="Contact Drivers"/>
 
         <activity android:name=".Register" />
         <activity android:name=".login" />

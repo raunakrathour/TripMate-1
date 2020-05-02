@@ -1,8 +1,10 @@
 package com.groupname.tripmate;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     NavigationView navigationView;
 
-
+    private TextView tv1navtop;
+    private TextView tv2navtop;
 
 
     @Override
@@ -37,9 +40,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         drawer = findViewById(R.id.drawer_layout);
         navigationView =findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
+            @Override
+            public void handleResponse(Boolean response) {
+                if(!response)
+                startActivity(new Intent(MainActivity.this,login.class));
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                startActivity(new Intent(MainActivity.this,login.class));
+            }
+        });
+
 
         //for rotating toogle
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -100,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             case R.id.nav_drivers://select driver button
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment,new Drivers_Fragment()).commit();//open drivers fragment
+                startActivity(new Intent(MainActivity.this,Drivers_Fragment.class));//open drivers fragment
                 break;
             case R.id.nav_view_announcement://select make announcement
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment,new ViewAnnouncement_Fragment()).commit();//open new announceent fragment
@@ -112,14 +130,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment,new SetAlarm_Fragment()).commit();//open SetAlarm fragment
                 break;
             case R.id.nav_share://select share
-                Toast.makeText(this, "Share your App", Toast.LENGTH_SHORT).show();//share app
+                Toast.makeText(this, "Share TripMate", Toast.LENGTH_SHORT).show();//share app
+                String shareBody = "Download the TripMate App and get ready to explore the world Download here: https://raunakrathour.github.io/Project/TripMate.apk";
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Spread Tripmate");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent,"Share Using"));
                 break;
             case R.id.nav_feedback://select feed back
                 Toast.makeText(this, "Give Your Valuable Feedback", Toast.LENGTH_SHORT).show();//send feedback, it opens mail send it to Tripcare@gmail.com
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + "tripmate.care@gmail.com"));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "TripMate Feedback.");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+                startActivity(Intent.createChooser(emailIntent, "Feedback"));
                 break;
         }
         //when an item in the nav drawer is selected it will close the drawer
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
