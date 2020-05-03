@@ -240,6 +240,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Backendless.Persistence.of(BackendlessUser.class).find(queryBuilder, new AsyncCallback<List<BackendlessUser>>() {
                 @Override
                 public void handleResponse(List<BackendlessUser> users) {
+                    int k=0;
                     for(int i=0;i<users.size();i++)
                     {
                         Point point= (Point) users.get(i).getProperty("location");
@@ -249,8 +250,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             LatLng positionMarker = new LatLng(b, a);
 
-
-                            Toast.makeText(MapsActivity.this, "Bus is at position " + Double.toString(point.getX()) + "," + Double.toString(point.getY()), Toast.LENGTH_SHORT).show();
+                            k++;
+                            Toast.makeText(MapsActivity.this, "Bus is at position " + Double.toString(b) + "," + Double.toString(a), Toast.LENGTH_SHORT).show();
                             mMap.addMarker(new MarkerOptions()
                                     .icon(BitmapDescriptorFactory.defaultMarker())
                                     .anchor(0.0f,1.0f)
@@ -261,6 +262,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             // Toast.makeText(MapsActivity.this, "", Toast.LENGTH_SHORT).show();
                         }
                     }
+                    if(k==0)
+                        Toast.makeText(MapsActivity.this, "No Bus at the moment", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -457,4 +460,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MapsActivity.this.finish();
         super.onBackPressed();
     }
+
+    @Override
+    protected void onDestroy() {
+        if(FirstClass.user.getProperty("isDriver").equals("1")&&isExistingPoint) {
+          /*  Backendless.Geo.removePoint(existingPoint, new AsyncCallback<Void>() {
+                @Override
+                public void handleResponse(Void response) {
+                    Toast.makeText(MapsActivity.this, "Removed point", Toast.LENGTH_SHORT).show();
+                    isExistingPoint =false;
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    Toast.makeText(MapsActivity.this, "Error" + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });*/
+            FirstClass.user.setProperty("location",null);
+            // FirstClass.user.setProperty("location",s);
+            Backendless.UserService.update(FirstClass.user, new AsyncCallback<BackendlessUser>() {
+                @Override
+                public void handleResponse(BackendlessUser response) {
+                    Toast.makeText(MapsActivity.this, "Location Unset", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    Toast.makeText(MapsActivity.this, "Error"+fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        super.onDestroy();
+    }
+
 }
