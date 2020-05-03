@@ -55,9 +55,17 @@ public class Schedule_Activity extends AppCompatActivity implements busAdapter.I
         if(FirstClass.user.getProperty("isAdmin").equals("0")) {
             ivDelete.setVisibility(View.GONE);
         }
+        else
+        {
+            ivDelete.setVisibility(View.VISIBLE);
+        }
 
         if(getIntent().hasExtra("activity") && getIntent().getStringExtra("activity").equals("homeFragment")) {
-            ivAdd.setVisibility(View.GONE);
+            ivAdd.setVisibility(View.VISIBLE);
+        }
+
+        if(getIntent().hasExtra("activity") && getIntent().getStringExtra("activity").equals("homeFragment")&&FirstClass.user.getProperty("isAdmin").equals("1")) {
+            ivDelete.setVisibility(View.GONE);
         }
 
         // fragmentManager = this.getSupportFragmentManager();

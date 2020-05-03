@@ -99,6 +99,7 @@ public class Drivers_Fragment extends AppCompatActivity implements personAdapter
                             Toast.makeText(Drivers_Fragment.this, "Driver added successfully", Toast.LENGTH_SHORT).show();
                             etDname.setText("");
                             etDnumber.setText("");
+                            startActivity(new Intent(Drivers_Fragment.this,MainActivity.class));
                             Drivers_Fragment.this.finish();
                         }
 
@@ -146,5 +147,11 @@ public class Drivers_Fragment extends AppCompatActivity implements personAdapter
             startActivity(intent);
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(Drivers_Fragment.this,MainActivity.class));
     }
 }
